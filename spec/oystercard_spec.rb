@@ -52,5 +52,20 @@ describe Oystercard do
 				end
 			end
 		end
+
+		# describe "#journey_log" do
+		# 	it "should respond to #each" do
+		# 		expect(subject.journey_log).to respond_to(:each)
+		# 	end
+
+		# 	it "has an empty list by default" do
+		# 		expect(subject.journey_log).to be_empty
+		# 	end
+
+		# 	it "touch_out updates the journey_log array" do
+		# 		expect { subject.touch_out(station) }.to change { subject.journey_log }
+		# 	end
+		# end
+
 	end
 end

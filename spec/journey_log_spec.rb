@@ -18,13 +18,41 @@ let(:journey) {double :journey}
 		it 'should respond to start_journey' do
 			expect(subject).to respond_to(:start_journey)
 		end 
-		# it 'should create a new journey' do
-		# 	expect()
-		# end	
 	end
-	# describe '#add_journey' do
-	# 	it 'adds a journey to the history array' do
-	# 		expect{subject.add_journey(journey)}.to change {subject.history}
-	# 	end 
-	# end
+	
+  # describe "#fare" do
+  #   context "is a complete journey (with entry and exit station)" do
+  #     before do
+  #       subject.entry_station = station
+  #       subject.exit_station = station
+  #     end
+
+  #     it "should return the mimimum fare" do
+  #       expect(subject.fare).to eq described_class::MIN_FARE
+  #     end
+  #   end
+
+  #   context "has an entry station but no exit station" do
+  #     before do
+  #       subject.entry_station = station
+  #     end
+
+  #     it "should return the penalty fare" do
+  #       expect(subject.fare).to eq described_class::PENALTY_FARE
+  #     end
+  #   end
+
+  #   context "has an exit station but no entry station" do
+  #     before do
+  #       subject.exit_station = station
+  #     end
+      
+  #     it "should return the penalty fare" do
+  #       expect(subject.fare).to eq described_class::PENALTY_FARE
+  #     end
+  #   end
+
+
+
+	
 end

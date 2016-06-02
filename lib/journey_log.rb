@@ -30,7 +30,7 @@ class JourneyLog
   private
 
 	  def incomplete_journey?
-	    (@current_journey.entry_station and !@current_journey.exit_station) or (!@current_journey.entry_station and @current_journey.exit_station)
+	    	(@current_journey.entry_station and !@current_journey.exit_station) or (!@current_journey.entry_station and @current_journey.exit_station)
 	  end
 
 		def add_journey

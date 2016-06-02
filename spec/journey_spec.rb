@@ -59,38 +59,4 @@ describe Journey do
       end
     end
   end
-
-  describe "#fare" do
-    context "is a complete journey (with entry and exit station)" do
-      before do
-        subject.entry_station = station
-        subject.exit_station = station
-      end
-
-      it "should return the mimimum fare" do
-        expect(subject.fare).to eq described_class::MIN_FARE
-      end
-    end
-
-    context "has an entry station but no exit station" do
-      before do
-        subject.entry_station = station
-      end
-
-      it "should return the penalty fare" do
-        expect(subject.fare).to eq described_class::PENALTY_FARE
-      end
-    end
-
-    context "has an exit station but no entry station" do
-      before do
-        subject.exit_station = station
-      end
-      
-      it "should return the penalty fare" do
-        expect(subject.fare).to eq described_class::PENALTY_FARE
-      end
-    end
-
-  end
 end
