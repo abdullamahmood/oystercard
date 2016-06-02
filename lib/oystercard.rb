@@ -1,17 +1,17 @@
 require_relative 'station'
-require_relative 'journey'
+require_relative 'journey_log'
 
 class Oystercard
 	BALANCE_LIMIT = 90
 	MIN_LIMIT = 1
 
-	attr_reader :balance, :previous_journeys, :current_journey
+	attr_reader :balance, :journey_log, :current_journey
 
 	def initialize
 		@balance = 0
 		@in_journey = false
-		@previous_journeys = []
-		@current_journey = Journey.new
+		@journey_log = JourneyLog.new
+		# @current_journey = Journey.new
 	end
 
 	def top_up(amount)
@@ -22,15 +22,19 @@ class Oystercard
 
 	def touch_in(station)
 		fail "Can't touch in your balance is below £#{MIN_LIMIT}" if @balance < MIN_LIMIT
-		@current_journey.entry_station = station
+		journey_log.start_journey(station)
+		# @current_journey.entry_station = station
 		self
 	end
 
 	def touch_out(station)
-		@current_journey.exit_station = station
-		@previous_journeys << @current_journey
-		@current_journey = Journey.new
-		deduct(@current_journey.fare)
+		deduct(journey_log.fare)
+		journey_log.end_journey(station)
+		# @current_journey.exit_station = station
+		# @journey_log << @current_journey
+		# @journey_log.end_journey(current_journey)
+		# @current_journey = Journey.new
+		# deduct(@current_journey.fare)
 		self
 	end
 

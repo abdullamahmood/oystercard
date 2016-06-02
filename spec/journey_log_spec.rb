@@ -14,12 +14,17 @@ let(:journey) {double :journey}
 		end 
 	end 
 
-	describe '#add_journey' do
-		it 'adds a journey to the history array' do
-			expect{subject.add_journey(journey)}.to change {subject.history}
+	describe '#start_journey' do
+		it 'should respond to start_journey' do
+			expect(subject).to respond_to(:start_journey)
 		end 
-	
-
-	end 
-	
+		# it 'should create a new journey' do
+		# 	expect()
+		# end	
+	end
+	# describe '#add_journey' do
+	# 	it 'adds a journey to the history array' do
+	# 		expect{subject.add_journey(journey)}.to change {subject.history}
+	# 	end 
+	# end
 end
