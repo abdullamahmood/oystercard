@@ -11,7 +11,6 @@ class Oystercard
 		@balance = 0
 		@in_journey = false
 		@journey_log = JourneyLog.new
-		# @current_journey = Journey.new
 	end
 
 	def top_up(amount)
@@ -23,18 +22,13 @@ class Oystercard
 	def touch_in(station)
 		fail "Can't touch in your balance is below £#{MIN_LIMIT}" if @balance < MIN_LIMIT
 		journey_log.start_journey(station)
-		# @current_journey.entry_station = station
 		self
 	end
 
 	def touch_out(station)
 		deduct(journey_log.fare)
 		journey_log.end_journey(station)
-		# @current_journey.exit_station = station
-		# @journey_log << @current_journey
-		# @journey_log.end_journey(current_journey)
-		# @current_journey = Journey.new
-		# deduct(@current_journey.fare)
+	
 		self
 	end
 
