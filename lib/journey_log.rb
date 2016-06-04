@@ -1,48 +1,42 @@
-require_relative 'journey'
+require_relative "journey"
 
 class JourneyLog
 
-  MIN_FARE = 1
-  PENALTY_FARE = 6
+  attr_reader :journeys, :current_journey
 
-	attr_reader :history, :current_journey, :in_journey
+  def initialize(journey = Journey.new)
+    @journeys = []
+    @current_journey = journey
+  end
 
-	def initialize
-		 @previous_journeys = []
-		 @current_journey = Journey.new
-		 @in_journey = false
-	end 
+  def start(station)
+    finish(:Incomplete) if in_journey?
+    @current_journey.start(station)
+  end
 
-	def start_journey(station)
-		in_journey? ? end_journey(:incomplete) : @current_journey.entry_station = station
-		@current_journey.in_journey = true
+  def finish(station)
+    in_journey? ? complete_journey(station) : incomplete_journey(station)
+    new_journey
+  end
 
-	end
+private
 
-	def end_journey(station)
-		@current_journey.exit_station = station
-		@in_journey = false
-		add_journey
-		@current_journey = Journey.new
-		
-	end
-
-	 def fare
-	 	incomplete? ? PENALTY_FARE : MIN_FARE
-	  end
-
-  private
-
-  def add_journey
-  	@previous_journeys << @current_journey
-  end 
+  def new_journey(journey = Journey.new)
+    @journeys << @current_journey
+    @current_journey = journey
+  end
 
   def in_journey?
-  	@current_journey.entry_station && @current_journey.exit_station.nil?
-  end 
+    @current_journey.in_journey?
+  end
 
- def incomplete?
- 	[previous_journeys.entry_station, @previous_journeys.exit_station].include? :incomplete
+  def complete_journey(station)
+    @current_journey.finish(station)
+  end
+
+  def incomplete_journey(station)
+    @current_journey.start(:Incomplete)
+    @current_journey.finish(station)
+  end
+
 end
-
-end 

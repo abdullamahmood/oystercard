@@ -1,50 +1,46 @@
-require_relative 'station'
-require_relative 'journey_log'
-require_relative 'journey'
+require_relative "journey_log"
 
 class Oystercard
-	BALANCE_LIMIT = 90
-	MIN_LIMIT = 1
 
-	attr_reader :balance, :journey_log, :current_journey, :in_journey
+  MAXIMUM_BALANCE = 90
+  MINIMUM_BALANCE = 1
 
-	def initialize
-		@balance = 0
-		@journey_log = JourneyLog.new
-	end
+  def initialize
+    @balance = 0
+    @log = JourneyLog.new
+  end
 
-	def top_up(amount)
-		fail "Can't add to your balance; would breach the £#{BALANCE_LIMIT} limit" if @balance + amount > BALANCE_LIMIT
-		@balance += amount
-		self
-	end
+  def top_up(amount)
+    fail "Maximum card balance exceeded. Maximum balance is: #{MAXIMUM_BALANCE}" if balance + amount > MAXIMUM_BALANCE
+    @balance += amount
+  end
 
-	def touch_in(station)
-		fail "Can't touch in your balance is below £#{MIN_LIMIT}" if @balance < MIN_LIMIT
-		journey_log.end_journey if in_journey?
-		journey_log.start_journey(station)
-		self
-	end
+  def touch_in(entry_station)
+    finish_journey if in_journey?
+    fail "Insufficient balance." if @balance < MINIMUM_BALANCE
+    @log.start(entry_station)
+  end
 
-	def touch_out(station)
-		@journey_log.end_journey(station)
-		deduct
-	
-		self
-	end
+  def touch_out(exit_station)
+    @log.finish(exit_station)
+    deduct
+  end
 
-	private
+  private
 
-	def deduct
-		@balance -= journey_log.last.fare
-	end
+  attr_reader :journey, :balance, :log
 
-	def in_journey?
-		@journey_log.in_journey?
-	end
+  def deduct
+    @balance -= log.journeys.last.fare
+  end
 
-	def end_journey
-		@journey_log.end_journey(:incomplete)
-		deduct
-	end
+  def finish_journey
+    @log.finish(:Incomplete)
+    deduct
+  end
+
+  def in_journey?
+    log.in_journey?
+  end
+
 end

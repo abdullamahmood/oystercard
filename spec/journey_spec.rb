@@ -1,62 +1,42 @@
-require "journey"
+require 'journey'
 
 describe Journey do
-  let(:station) { double(:station) }
 
-  it "should have no entry station on instantiation" do
-    expect(subject.entry_station).to be_nil
+  subject(:journey) {described_class.new}
+  let(:start_station) {double :start_station, zone: 1}
+  let(:finish_station) {double :finish_station,zone:  1}
+
+  # it "can start a journey" do
+  #   journey.start(start_station)
+  #   expect(journey.start_station).to eq start_station
+  # end
+  #
+  # it "can finish a journey" do
+  #   journey.finish(finish_station)
+  #   expect(journey.finish_station).to eq finish_station
+  # end
+
+  it "charges a penalty fare for incomplete journeys" do
+    journey.start(start_station)
+    journey.finish(:Incomplete)
+    expect(journey.fare).to eq Journey::MAXIMUM_FARE
   end
 
-  it "should have no exit station on instantiation" do
-    expect(subject.exit_station).to be_nil
+  it "charges a default fare for a complete journey" do
+    journey.start(start_station)
+    journey.finish(finish_station)
+    expect(journey.fare).to eq Journey::MINIMUM_FARE
   end
 
-  it "should store a name of an entry station" do
-    subject.entry_station = station
-    expect(subject.entry_station).to eq station
+  it "returns the status of a journey in progress" do
+    journey.start(start_station)
+    expect(journey.in_journey?).to eq true
   end
 
-  it "should store a name of an exit station" do
-    subject.exit_station = station
-    expect(subject.exit_station).to eq station
-  end
+  it "returns the status of a journey completed" do
+    journey.start(start_station)
+    journey.finish(finish_station)
+    expect(journey.in_journey?).to eq false
 
-  describe "#in_journey?" do
-    context "has neither entry nor exit stations" do
-      it "should not be in journey" do
-        expect(subject).to_not be_in_journey
-      end
-    end
-
-    context "has an exit station" do
-      before do
-        subject.exit_station = station
-      end
-
-      it "should not be in journey" do
-        expect(subject).to_not be_in_journey
-      end
-    end
-
-    context "has an entry station but no exit station" do
-      before do
-        subject.entry_station = station
-      end
-
-      it "should be in journey" do
-        expect(subject).to be_in_journey
-      end
-    end
-
-    context "has both entry and exit station" do
-      before do
-        subject.entry_station = station
-        subject.exit_station = station
-      end
-
-      it "should not be in journey" do
-        expect(subject).to_not be_in_journey
-      end
-    end
   end
 end
